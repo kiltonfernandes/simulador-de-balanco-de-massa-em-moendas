@@ -18,6 +18,18 @@ const EquipamentosStep = ({ data, onDataChange }: EquipamentosStepProps) => {
     angulo_inclinacao: data.equipamentos?.angulo_inclinacao || [0, 0, 15, 15, 15, 15]
   });
 
+  // Atualizar quando dados externos mudarem (botão Ver Exemplo)
+  useEffect(() => {
+    if (data.equipamentos) {
+      setFormData({
+        fabricante: data.equipamentos.fabricante || Array(6).fill("DEDINI"),
+        diametro_nominal: data.equipamentos.diametro_nominal || [812.8, 1000, 1075, 1075, 1075, 1075],
+        comprimento_nominal: data.equipamentos.comprimento_nominal || [1524, 2000, 2000, 2000, 2000, 2000],
+        angulo_inclinacao: data.equipamentos.angulo_inclinacao || [0, 0, 15, 15, 15, 15]
+      });
+    }
+  }, [data.equipamentos]);
+
   useEffect(() => {
     onDataChange({ equipamentos: formData });
   }, [formData, onDataChange]);

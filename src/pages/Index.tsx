@@ -3,17 +3,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calculator, Gauge, FileText, CheckCircle, Cog, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import millBackground from "@/assets/mill-background.jpg";
-import { generateSampleDataComplete } from "@/lib/sampleDataGenerator";
 
 const Index = () => {
   const navigate = useNavigate();
 
   const handleSampleData = () => {
-    // Gerar dados de exemplo aleatórios
-    const sampleData = generateSampleDataComplete();
-    
-    // Navegar para wizard com dados de exemplo
-    navigate("/wizard", { state: { sampleData } });
+    // Navegar para wizard vazio (será preenchido com botão na própria página)
+    navigate("/wizard");
   };
 
   const features = [

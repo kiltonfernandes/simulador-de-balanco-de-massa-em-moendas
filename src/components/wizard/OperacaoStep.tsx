@@ -24,6 +24,24 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
     densidade_bagaco: data.operacao?.densidade_bagaco || [1.4, 1.4, 1.4, 1.4, 1.4, 1.4]
   });
 
+  // Atualizar quando dados externos mudarem (botão Ver Exemplo)
+  useEffect(() => {
+    if (data.operacao) {
+      setFormData({
+        rotacoes: data.operacao.rotacoes || [6.5, 6.5, 6.5, 6.0, 6.0, 6.0],
+        coeficientes_k: data.operacao.coeficientes_k || {
+          k_et_st: [1.70, 1.70, 1.70, 1.70, 1.70, 2.00],
+          k_pt_st: [5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
+          k_ebt_et: [1.6, 1.6, 1.7, 1.7, 1.8, 1.8],
+          k_cbt_ebt: [1.1, 1.1, 1.1, 1.1, 1.1, 1.1],
+          k_sbt_cbt: [1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
+        },
+        fibra_bagaco: data.operacao.fibra_bagaco || [0.30, 0.375, 0.415, 0.45, 0.485, 0.52],
+        densidade_bagaco: data.operacao.densidade_bagaco || [1.4, 1.4, 1.4, 1.4, 1.4, 1.4]
+      });
+    }
+  }, [data.operacao]);
+
   useEffect(() => {
     onDataChange({ operacao: formData });
   }, [formData, onDataChange]);

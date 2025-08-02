@@ -22,8 +22,8 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
     eficiencia_tempo: data.usina?.eficiencia_tempo || ""
   });
 
+  // Atualizar quando dados externos mudarem (botão Ver Exemplo)
   useEffect(() => {
-    // Atualizar se dados de exemplo forem fornecidos
     if (data.usina) {
       setFormData({
         usina: data.usina.usina || "",

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, ArrowRight, Calculator } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { ArrowLeft, ArrowRight, Calculator, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { generateSampleDataComplete } from "@/lib/sampleDataGenerator";
 
 // Step components (we'll create these)
 import UsinaStep from "@/components/wizard/UsinaStep";
@@ -14,16 +15,30 @@ import RevisaoStep from "@/components/wizard/RevisaoStep";
 
 const Wizard = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
 
-  // Carregar dados de exemplo se fornecidos
-  useEffect(() => {
-    if (location.state?.sampleData) {
-      setFormData(location.state.sampleData);
+  const generateSampleForCurrentStep = () => {
+    const sampleData = generateSampleDataComplete();
+    
+    // Atualizar apenas os dados da etapa atual
+    switch (currentStep) {
+      case 1:
+        setFormData(prev => ({ ...prev, usina: sampleData.usina }));
+        break;
+      case 2:
+        setFormData(prev => ({ ...prev, equipamentos: sampleData.equipamentos }));
+        break;
+      case 3:
+        setFormData(prev => ({ ...prev, camisas: sampleData.camisas }));
+        break;
+      case 4:
+        setFormData(prev => ({ ...prev, operacao: sampleData.operacao }));
+        break;
+      default:
+        break;
     }
-  }, [location.state]);
+  };
 
   const steps = [
     { id: 1, title: "Dados da Usina", component: UsinaStep },
@@ -83,6 +98,19 @@ const Wizard = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Botão Ver Exemplo - apenas nas etapas 1-4 */}
+            {currentStep <= 4 && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={generateSampleForCurrentStep}
+                className="flex items-center gap-2"
+              >
+                <FileText className="w-4 h-4" />
+                Ver Exemplo
+              </Button>
+            )}
           </div>
         </div>
       </header>

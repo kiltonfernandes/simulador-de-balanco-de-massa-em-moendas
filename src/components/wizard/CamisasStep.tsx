@@ -25,6 +25,25 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
     }
   });
 
+  // Atualizar quando dados externos mudarem (botão Ver Exemplo)  
+  useEffect(() => {
+    if (data.camisas) {
+      setFormData({
+        diametros_camisas: data.camisas.diametros_camisas || {
+          pressao: [1060, 1000, 1005, 1005, 1005, 1005],
+          entrada: [1140, 1060, 1040, 1000, 1080, 1000],
+          superior: [1180, 1090, 1080, 1040, 1120, 1040],
+          saida: [1220, 1130, 1120, 1080, 1160, 1080]
+        },
+        frisos: data.camisas.frisos || {
+          passo: [2, 2, 1.5, 1.5, 1.5, 1.5],
+          angulo: [35, 35, 35, 35, 35, 35],
+          altura: [62, 62, 42, 42, 42, 42]
+        }
+      });
+    }
+  }, [data.camisas]);
+
   useEffect(() => {
     onDataChange({ camisas: formData });
   }, [formData, onDataChange]);
