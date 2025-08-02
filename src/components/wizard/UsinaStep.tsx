@@ -11,16 +11,33 @@ interface UsinaStepProps {
 
 const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
   const [formData, setFormData] = useState({
-    usina: data.usina || "",
-    safra: data.safra || new Date().getFullYear().toString(),
-    moenda: data.moenda || "A",
-    tch: data.tch || "",
-    fibra_cana: data.fibra_cana || "",
-    tc_safra: data.tc_safra || "",
-    dias_safra: data.dias_safra || "",
-    meses_safra: data.meses_safra || "",
-    eficiencia_tempo: data.eficiencia_tempo || ""
+    usina: data.usina?.usina || "",
+    safra: data.usina?.safra || new Date().getFullYear().toString(),
+    moenda: data.usina?.moenda || "A",
+    tch: data.usina?.tch || "",
+    fibra_cana: data.usina?.fibra_cana || "",
+    tc_safra: data.usina?.tc_safra || "",
+    dias_safra: data.usina?.dias_safra || "",
+    meses_safra: data.usina?.meses_safra || "",
+    eficiencia_tempo: data.usina?.eficiencia_tempo || ""
   });
+
+  useEffect(() => {
+    // Atualizar se dados de exemplo forem fornecidos
+    if (data.usina) {
+      setFormData({
+        usina: data.usina.usina || "",
+        safra: data.usina.safra || new Date().getFullYear().toString(),
+        moenda: data.usina.moenda || "A",
+        tch: data.usina.tch || "",
+        fibra_cana: data.usina.fibra_cana || "",
+        tc_safra: data.usina.tc_safra || "",
+        dias_safra: data.usina.dias_safra || "",
+        meses_safra: data.usina.meses_safra || "",
+        eficiencia_tempo: data.usina.eficiencia_tempo || ""
+      });
+    }
+  }, [data.usina]);
 
   useEffect(() => {
     onDataChange({ usina: formData });
@@ -88,7 +105,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
                 type="number"
                 value={formData.tch}
                 onChange={(e) => handleChange("tch", e.target.value)}
-                placeholder="800"
+                placeholder="TCH (200 - 1200 t/h)"
               />
             </div>
             <div>
@@ -99,7 +116,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
                 step="0.01"
                 value={formData.fibra_cana}
                 onChange={(e) => handleChange("fibra_cana", e.target.value)}
-                placeholder="0.13"
+                placeholder="F%C (8% - 18% = 0.08 - 0.18)"
               />
             </div>
             <div>
@@ -109,7 +126,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
                 type="number"
                 value={formData.tc_safra}
                 onChange={(e) => handleChange("tc_safra", e.target.value)}
-                placeholder="3500000"
+                placeholder="TC Safra (800.000 - 5.000.000 t)"
               />
             </div>
           </CardContent>
@@ -131,7 +148,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
                 type="number"
                 value={formData.dias_safra}
                 onChange={(e) => handleChange("dias_safra", e.target.value)}
-                placeholder="215"
+                placeholder="Dias (180 - 250 dias)"
               />
             </div>
             <div>
@@ -142,7 +159,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
                 step="0.01"
                 value={formData.meses_safra}
                 onChange={(e) => handleChange("meses_safra", e.target.value)}
-                placeholder="7.17"
+                placeholder="Meses (6.0 - 8.5 meses)"
               />
             </div>
             <div>
@@ -153,7 +170,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
                 step="0.01"
                 value={formData.eficiencia_tempo}
                 onChange={(e) => handleChange("eficiencia_tempo", e.target.value)}
-                placeholder="0.85"
+                placeholder="η Tempo (75% - 95% = 0.75 - 0.95)"
               />
             </div>
           </CardContent>

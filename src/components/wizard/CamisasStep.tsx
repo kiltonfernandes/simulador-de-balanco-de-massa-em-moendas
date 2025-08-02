@@ -99,6 +99,7 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
                           index, 
                           parseInt(e.target.value)
                         )}
+                        placeholder="Ø (800 - 1300mm)"
                       />
                     </div>
                   ))}
@@ -135,6 +136,7 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
                           index, 
                           parseFloat(e.target.value)
                         )}
+                        placeholder="Passo (1.2 - 2.5pol)"
                       />
                     </div>
                   ))}
@@ -161,6 +163,7 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
                           index, 
                           parseInt(e.target.value)
                         )}
+                        placeholder="Ângulo (25 - 45°)"
                       />
                     </div>
                   ))}
@@ -187,6 +190,7 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
                           index, 
                           parseInt(e.target.value)
                         )}
+                        placeholder="Altura (40 - 80mm)"
                       />
                     </div>
                   ))}

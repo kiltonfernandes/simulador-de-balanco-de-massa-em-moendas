@@ -69,6 +69,7 @@ const EquipamentosStep = ({ data, onDataChange }: EquipamentosStepProps) => {
                     step="0.1"
                     value={formData.diametro_nominal[index]}
                     onChange={(e) => handleChange("diametro_nominal", index, parseFloat(e.target.value))}
+                    placeholder="Øc (900 - 1400mm)"
                   />
                 </div>
                 <div>
@@ -78,6 +79,7 @@ const EquipamentosStep = ({ data, onDataChange }: EquipamentosStepProps) => {
                     type="number"
                     value={formData.comprimento_nominal[index]}
                     onChange={(e) => handleChange("comprimento_nominal", index, parseInt(e.target.value))}
+                    placeholder="Lc (1800 - 2600mm)"
                   />
                 </div>
                 <div>
@@ -87,6 +89,7 @@ const EquipamentosStep = ({ data, onDataChange }: EquipamentosStepProps) => {
                     type="number"
                     value={formData.angulo_inclinacao[index]}
                     onChange={(e) => handleChange("angulo_inclinacao", index, parseInt(e.target.value))}
+                    placeholder="α (0 - 15°)"
                   />
                 </div>
               </div>

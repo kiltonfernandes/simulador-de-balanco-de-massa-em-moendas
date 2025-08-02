@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, Calculator } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Step components (we'll create these)
 import UsinaStep from "@/components/wizard/UsinaStep";
@@ -14,8 +14,16 @@ import RevisaoStep from "@/components/wizard/RevisaoStep";
 
 const Wizard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
+
+  // Carregar dados de exemplo se fornecidos
+  useEffect(() => {
+    if (location.state?.sampleData) {
+      setFormData(location.state.sampleData);
+    }
+  }, [location.state]);
 
   const steps = [
     { id: 1, title: "Dados da Usina", component: UsinaStep },

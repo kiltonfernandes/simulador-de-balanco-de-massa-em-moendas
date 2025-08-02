@@ -94,6 +94,7 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
                   step="0.1"
                   value={formData.rotacoes[index]}
                   onChange={(e) => handleRotacaoChange(index, parseFloat(e.target.value))}
+                  placeholder="rpm (4.0 - 8.0)"
                 />
               </div>
             ))}
@@ -164,6 +165,7 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
                     step="0.001"
                     value={formData.fibra_bagaco[index]}
                     onChange={(e) => handleFibraChange(index, parseFloat(e.target.value))}
+                    placeholder="Fibra (30% - 52% = 0.30 - 0.52)"
                   />
                 </div>
               ))}
@@ -191,6 +193,7 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
                     step="0.1"
                     value={formData.densidade_bagaco[index]}
                     onChange={(e) => handleDensidadeChange(index, parseFloat(e.target.value))}
+                    placeholder="Densidade (1.2 - 1.6)"
                   />
                 </div>
               ))}

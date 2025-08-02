@@ -3,9 +3,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calculator, Gauge, FileText, CheckCircle, Cog, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import millBackground from "@/assets/mill-background.jpg";
+import { generateSampleDataComplete } from "@/lib/sampleDataGenerator";
 
 const Index = () => {
   const navigate = useNavigate();
+
+  const handleSampleData = () => {
+    // Gerar dados de exemplo aleatórios
+    const sampleData = generateSampleDataComplete();
+    
+    // Navegar para wizard com dados de exemplo
+    navigate("/wizard", { state: { sampleData } });
+  };
 
   const features = [
     {
@@ -91,6 +100,7 @@ const Index = () => {
               variant="outline" 
               size="xl"
               className="w-full sm:w-auto"
+              onClick={handleSampleData}
             >
               <FileText className="w-5 h-5" />
               Ver Exemplo
