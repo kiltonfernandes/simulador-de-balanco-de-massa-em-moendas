@@ -89,7 +89,7 @@ const Wizard = () => {
             </Button>
             <div className="flex-1">
               <h1 className="text-lg font-semibold text-foreground">
-                MillCalc Pro - {steps[currentStep - 1].title}
+                Simulador de Balanço de Massa - {steps[currentStep - 1].title}
               </h1>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-sm text-muted-foreground">

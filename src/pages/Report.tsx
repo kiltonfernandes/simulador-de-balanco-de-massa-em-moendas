@@ -68,7 +68,7 @@ const Report = () => {
       }
 
       // Gerar nome do arquivo
-      const fileName = `MillCalc_${formData.usina?.usina || 'Relatorio'}_${formData.usina?.safra || new Date().getFullYear()}.pdf`;
+      const fileName = `SimuladorBalancoMassa_${formData.usina?.usina || 'Relatorio'}_${formData.usina?.safra || new Date().getFullYear()}.pdf`;
       
       pdf.save(fileName);
     } catch (error) {

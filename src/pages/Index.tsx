@@ -45,8 +45,8 @@ const Index = () => {
               <Cog className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">MillCalc Pro</h1>
-              <p className="text-xs text-muted-foreground">Calculadora de Regulagem de Moendas</p>
+              <h1 className="text-xl font-bold text-foreground">Simulador de Balanço de Massa</h1>
+              <p className="text-xs text-muted-foreground">em Moendas</p>
             </div>
           </div>
           <Button 
@@ -215,7 +215,7 @@ const Index = () => {
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <Cog className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="text-foreground font-semibold">MillCalc Pro</span>
+            <span className="text-foreground font-semibold">Simulador de Balanço de Massa em Moendas</span>
           </div>
           <p className="text-sm text-muted-foreground">
             Desenvolvido para a indústria sucroalcooleira • Versão 1.0

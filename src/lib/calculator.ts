@@ -1,4 +1,4 @@
-// Calculadora de Regulagem de Moendas
+// Simulador de Balanço de Massa em Moendas
 // Este módulo encapsula todas as fórmulas e cálculos necessários
 // As fórmulas são mantidas privadas para proteção intelectual
 
