@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +24,17 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
 
   // Atualizar quando dados externos mudarem (botão Ver Exemplo)
   useEffect(() => {
-    if (data.usina) {
+    if (data.usina && JSON.stringify(data.usina) !== JSON.stringify({
+      usina: formData.usina || "",
+      safra: formData.safra || new Date().getFullYear().toString(),
+      moenda: formData.moenda || "A",
+      tch: formData.tch || "",
+      fibra_cana: formData.fibra_cana || "",
+      tc_safra: formData.tc_safra || "",
+      dias_safra: formData.dias_safra || "",
+      meses_safra: formData.meses_safra || "",
+      eficiencia_tempo: formData.eficiencia_tempo || ""
+    })) {
       setFormData({
         usina: data.usina.usina || "",
         safra: data.usina.safra || new Date().getFullYear().toString(),
@@ -37,7 +47,7 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
         eficiencia_tempo: data.usina.eficiencia_tempo || ""
       });
     }
-  }, [data.usina]);
+  }, [data.usina, formData]);
 
   useEffect(() => {
     onDataChange({ usina: formData });
@@ -187,4 +197,4 @@ const UsinaStep = ({ data, onDataChange }: UsinaStepProps) => {
   );
 };
 
-export default UsinaStep;
+export default memo(UsinaStep);

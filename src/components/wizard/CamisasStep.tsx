@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,7 +27,7 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
 
   // Atualizar quando dados externos mudarem (botão Ver Exemplo)  
   useEffect(() => {
-    if (data.camisas) {
+    if (data.camisas && JSON.stringify(data.camisas) !== JSON.stringify(formData)) {
       setFormData({
         diametros_camisas: data.camisas.diametros_camisas || {
           pressao: [1060, 1000, 1005, 1005, 1005, 1005],
@@ -42,7 +42,7 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
         }
       });
     }
-  }, [data.camisas]);
+  }, [data.camisas, formData]);
 
   useEffect(() => {
     onDataChange({ camisas: formData });
@@ -231,4 +231,4 @@ const CamisasStep = ({ data, onDataChange }: CamisasStepProps) => {
   );
 };
 
-export default CamisasStep;
+export default memo(CamisasStep);

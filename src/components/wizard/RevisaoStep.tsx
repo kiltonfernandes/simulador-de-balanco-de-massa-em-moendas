@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -48,9 +48,18 @@ const RevisaoStep = ({ data, onDataChange }: RevisaoStepProps) => {
     }
 
     const isValid = errors.length === 0;
-    setValidation({ isValid, warnings, errors });
+    const newValidation = { isValid, warnings, errors };
     
-    onDataChange({ validation: { isValid, warnings, errors } });
+    // Only update validation state if it actually changed
+    setValidation(prevValidation => {
+      if (JSON.stringify(prevValidation) !== JSON.stringify(newValidation)) {
+        return newValidation;
+      }
+      return prevValidation;
+    });
+    
+    // Do NOT call onDataChange to avoid infinite loops
+    // The validation result is internal to this component
   };
 
   const renderSection = (title: string, data: any, icon: React.ReactNode) => {
@@ -209,4 +218,4 @@ const RevisaoStep = ({ data, onDataChange }: RevisaoStepProps) => {
   );
 };
 
-export default RevisaoStep;
+export default memo(RevisaoStep);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, startTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -18,27 +18,29 @@ const Wizard = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
 
-  const generateSampleForCurrentStep = () => {
-    const sampleData = generateSampleDataComplete();
-    
-    // Atualizar apenas os dados da etapa atual
-    switch (currentStep) {
-      case 1:
-        setFormData(prev => ({ ...prev, usina: sampleData.usina }));
-        break;
-      case 2:
-        setFormData(prev => ({ ...prev, equipamentos: sampleData.equipamentos }));
-        break;
-      case 3:
-        setFormData(prev => ({ ...prev, camisas: sampleData.camisas }));
-        break;
-      case 4:
-        setFormData(prev => ({ ...prev, operacao: sampleData.operacao }));
-        break;
-      default:
-        break;
-    }
-  };
+  const generateSampleForCurrentStep = useCallback(() => {
+    startTransition(() => {
+      const sampleData = generateSampleDataComplete();
+      
+      // Atualizar apenas os dados da etapa atual
+      switch (currentStep) {
+        case 1:
+          setFormData(prev => ({ ...prev, usina: sampleData.usina }));
+          break;
+        case 2:
+          setFormData(prev => ({ ...prev, equipamentos: sampleData.equipamentos }));
+          break;
+        case 3:
+          setFormData(prev => ({ ...prev, camisas: sampleData.camisas }));
+          break;
+        case 4:
+          setFormData(prev => ({ ...prev, operacao: sampleData.operacao }));
+          break;
+        default:
+          break;
+      }
+    });
+  }, [currentStep]);
 
   const steps = [
     { id: 1, title: "Dados da Usina", component: UsinaStep },
@@ -68,9 +70,9 @@ const Wizard = () => {
     }
   };
 
-  const handleStepData = (stepData: any) => {
+  const handleStepData = useCallback((stepData: any) => {
     setFormData(prev => ({ ...prev, ...stepData }));
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-subtle">

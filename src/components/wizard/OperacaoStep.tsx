@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,7 +26,7 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
 
   // Atualizar quando dados externos mudarem (botão Ver Exemplo)
   useEffect(() => {
-    if (data.operacao) {
+    if (data.operacao && JSON.stringify(data.operacao) !== JSON.stringify(formData)) {
       setFormData({
         rotacoes: data.operacao.rotacoes || [6.5, 6.5, 6.5, 6.0, 6.0, 6.0],
         coeficientes_k: data.operacao.coeficientes_k || {
@@ -40,7 +40,7 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
         densidade_bagaco: data.operacao.densidade_bagaco || [1.4, 1.4, 1.4, 1.4, 1.4, 1.4]
       });
     }
-  }, [data.operacao]);
+  }, [data.operacao, formData]);
 
   useEffect(() => {
     onDataChange({ operacao: formData });
@@ -231,4 +231,4 @@ const OperacaoStep = ({ data, onDataChange }: OperacaoStepProps) => {
   );
 };
 
-export default OperacaoStep;
+export default memo(OperacaoStep);
