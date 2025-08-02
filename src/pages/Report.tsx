@@ -4,6 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Download, BarChart3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { calculateMillRegulation } from "@/lib/calculator";
+import AberturasChart from "@/components/charts/AberturasChart";
+import PressoesChart from "@/components/charts/PressoesChart";
+import VelocidadesChart from "@/components/charts/VelocidadesChart";
+import EficienciaChart from "@/components/charts/EficienciaChart";
+import InputRangesInfo from "@/components/InputRangesInfo";
 
 const Report = () => {
   const location = useLocation();
@@ -148,14 +153,24 @@ const Report = () => {
             
             <Card className="shadow-card border-border/50">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">
-                  ✓
+                <div className={`text-3xl font-bold mb-2 ${
+                  results?.summary?.status === 'success' ? 'text-green-600' : 
+                  results?.summary?.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
+                }`}>
+                  {results?.summary?.status === 'success' ? '✓' : 
+                   results?.summary?.status === 'warning' ? '⚠' : '✗'}
                 </div>
                 <div className="text-sm text-muted-foreground">Status</div>
-                <div className="text-xs text-muted-foreground mt-1">Calculado</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {results?.summary?.status === 'success' ? 'Calculado' : 
+                   results?.summary?.status === 'warning' ? 'Com Avisos' : 'Erro'}
+                </div>
               </CardContent>
             </Card>
           </div>
+
+          {/* Faixas de Entrada */}
+          <InputRangesInfo />
 
           {/* Resultados por Terno */}
           <div className="space-y-6">
@@ -163,11 +178,11 @@ const Report = () => {
               Resultados por Terno
             </h2>
             
-            {Array.from({ length: 6 }, (_, i) => i + 1).map((terno) => (
-              <Card key={terno} className="shadow-card border-border/50">
+            {results?.ternos?.map((terno) => (
+              <Card key={terno.id} className="shadow-card border-border/50">
                 <CardHeader className="pb-4">
                   <CardTitle className="text-xl text-foreground">
-                    {terno}º Terno
+                    {terno.id}º Terno
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -177,15 +192,15 @@ const Report = () => {
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Pressão:</span>
-                          <span className="font-medium">{(Math.random() * 100 + 300).toFixed(1)}</span>
+                          <span className="font-medium">{terno.aberturas.pressao_trabalho.toFixed(1)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Entrada:</span>
-                          <span className="font-medium">{(Math.random() * 50 + 100).toFixed(1)}</span>
+                          <span className="font-medium">{terno.aberturas.entrada_trabalho.toFixed(1)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Saída:</span>
-                          <span className="font-medium">{(Math.random() * 30 + 50).toFixed(1)}</span>
+                          <span className="font-medium">{terno.aberturas.saida_trabalho.toFixed(1)}</span>
                         </div>
                       </div>
                     </div>
@@ -195,15 +210,15 @@ const Report = () => {
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Entrada:</span>
-                          <span className="font-medium">{(Math.random() * 50 + 150).toFixed(1)}</span>
+                          <span className="font-medium">{terno.bagaceiras.entrada.toFixed(1)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Centro:</span>
-                          <span className="font-medium">{(Math.random() * 40 + 130).toFixed(1)}</span>
+                          <span className="font-medium">{terno.bagaceiras.centro.toFixed(1)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Saída:</span>
-                          <span className="font-medium">{(Math.random() * 30 + 120).toFixed(1)}</span>
+                          <span className="font-medium">{terno.bagaceiras.saida.toFixed(1)}</span>
                         </div>
                       </div>
                     </div>
@@ -213,11 +228,15 @@ const Report = () => {
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Hidráulica:</span>
-                          <span className="font-medium">{(Math.random() * 500 + 1000).toFixed(0)}</span>
+                          <span className="font-medium">{terno.pressoes.hidraulica_trabalho.toFixed(0)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Mancal:</span>
-                          <span className="font-medium">{(Math.random() * 100 + 200).toFixed(0)}</span>
+                          <span className="font-medium">{terno.pressoes.mancal.toFixed(0)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Nitrogênio:</span>
+                          <span className="font-medium">{terno.pressoes.nitrogenio.toFixed(0)}</span>
                         </div>
                       </div>
                     </div>
@@ -227,21 +246,41 @@ const Report = () => {
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Rotação:</span>
-                          <span className="font-medium">{formData.operacao?.rotacoes?.[terno - 1] || 6.0} rpm</span>
+                          <span className="font-medium">{terno.velocidades.rotacao.toFixed(1)} rpm</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Periférica:</span>
-                          <span className="font-medium">{(Math.random() * 10 + 20).toFixed(1)} m/min</span>
+                          <span className="font-medium">{terno.velocidades.periferica_media.toFixed(1)} m/min</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Bagaço:</span>
+                          <span className="font-medium">{terno.bagaco.toneladas_hora.toFixed(1)} t/h</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )) || (
+              // Fallback se não houver resultados
+              Array.from({ length: 6 }, (_, i) => i + 1).map((terno) => (
+                <Card key={terno} className="shadow-card border-border/50">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl text-foreground">
+                      {terno}º Terno
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center text-muted-foreground py-8">
+                      Dados não disponíveis
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
 
-          {/* Gráficos Placeholder */}
+          {/* Gráficos de Análise */}
           <Card className="shadow-card border-border/50">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl text-foreground flex items-center gap-2">
@@ -250,22 +289,116 @@ const Report = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="h-64 bg-gradient-subtle rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-muted-foreground">Gráfico de Aberturas</p>
-                  </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Gráfico de Aberturas */}
+                <div className="bg-card rounded-lg p-4 border border-border/50">
+                  {results?.graficos?.aberturas_data ? (
+                    <AberturasChart data={results.graficos.aberturas_data} />
+                  ) : (
+                    <div className="h-64 flex items-center justify-center">
+                      <div className="text-center">
+                        <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-muted-foreground">Dados não disponíveis</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="h-64 bg-gradient-subtle rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-muted-foreground">Gráfico de Pressões</p>
-                  </div>
+
+                {/* Gráfico de Pressões */}
+                <div className="bg-card rounded-lg p-4 border border-border/50">
+                  {results?.graficos?.pressoes_data ? (
+                    <PressoesChart data={results.graficos.pressoes_data} />
+                  ) : (
+                    <div className="h-64 flex items-center justify-center">
+                      <div className="text-center">
+                        <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-muted-foreground">Dados não disponíveis</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Gráfico de Velocidades */}
+                <div className="bg-card rounded-lg p-4 border border-border/50">
+                  {results?.graficos?.velocidades_data ? (
+                    <VelocidadesChart data={results.graficos.velocidades_data} />
+                  ) : (
+                    <div className="h-64 flex items-center justify-center">
+                      <div className="text-center">
+                        <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-muted-foreground">Dados não disponíveis</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Gráfico de Eficiência */}
+                <div className="bg-card rounded-lg p-4 border border-border/50">
+                  {results?.graficos?.eficiencia_data ? (
+                    <EficienciaChart data={results.graficos.eficiencia_data} />
+                  ) : (
+                    <div className="h-64 flex items-center justify-center">
+                      <div className="text-center">
+                        <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-muted-foreground">Dados não disponíveis</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Validações e Observações */}
+          {results?.validacao && (
+            <Card className="shadow-card border-border/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-foreground">
+                  Validações e Observações
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {results.validacao.erros.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-red-600">Erros:</h4>
+                    <ul className="space-y-1">
+                      {results.validacao.erros.map((erro, idx) => (
+                        <li key={idx} className="text-sm text-red-600 bg-red-50 p-2 rounded">
+                          • {erro}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {results.validacao.avisos.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-yellow-600">Avisos:</h4>
+                    <ul className="space-y-1">
+                      {results.validacao.avisos.map((aviso, idx) => (
+                        <li key={idx} className="text-sm text-yellow-700 bg-yellow-50 p-2 rounded">
+                          ⚠ {aviso}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {results.validacao.observacoes.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-blue-600">Observações:</h4>
+                    <ul className="space-y-1">
+                      {results.validacao.observacoes.map((obs, idx) => (
+                        <li key={idx} className="text-sm text-blue-700 bg-blue-50 p-2 rounded">
+                          ℹ {obs}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
         </div>
       </div>
