@@ -20,7 +20,7 @@ const EquipamentosStep = ({ data, onDataChange }: EquipamentosStepProps) => {
 
   // Atualizar quando dados externos mudarem (botão Ver Exemplo)
   useEffect(() => {
-    if (data.equipamentos) {
+    if (data.equipamentos && JSON.stringify(data.equipamentos) !== JSON.stringify(formData)) {
       setFormData({
         fabricante: data.equipamentos.fabricante || Array(6).fill("DEDINI"),
         diametro_nominal: data.equipamentos.diametro_nominal || [812.8, 1000, 1075, 1075, 1075, 1075],
@@ -28,7 +28,7 @@ const EquipamentosStep = ({ data, onDataChange }: EquipamentosStepProps) => {
         angulo_inclinacao: data.equipamentos.angulo_inclinacao || [0, 0, 15, 15, 15, 15]
       });
     }
-  }, [data.equipamentos]);
+  }, [data.equipamentos, formData]);
 
   useEffect(() => {
     onDataChange({ equipamentos: formData });

@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Download, BarChart3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { calculateMillRegulation } from "@/lib/calculator";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import AberturasChart from "@/components/charts/AberturasChart";
 import PressoesChart from "@/components/charts/PressoesChart";
 import VelocidadesChart from "@/components/charts/VelocidadesChart";
@@ -32,9 +34,47 @@ const Report = () => {
     }, 1500);
   }, [formData, navigate]);
 
-  const handleExportPDF = () => {
-    // Implementar exportação PDF
-    console.log("Exportando PDF...");
+  const handleExportPDF = async () => {
+    try {
+      const reportElement = document.getElementById('report-content');
+      if (!reportElement) return;
+
+      // Configurações para melhor qualidade
+      const canvas = await html2canvas(reportElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff'
+      });
+
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      const pdf = new jsPDF('p', 'mm');
+      let position = 0;
+
+      // Adicionar primeira página
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Adicionar páginas adicionais se necessário
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Gerar nome do arquivo
+      const fileName = `MillCalc_${formData.usina?.usina || 'Relatorio'}_${formData.usina?.safra || new Date().getFullYear()}.pdf`;
+      
+      pdf.save(fileName);
+    } catch (error) {
+      console.error('Erro ao exportar PDF:', error);
+      alert('Erro ao exportar PDF. Tente novamente.');
+    }
   };
 
   if (loading) {
@@ -116,7 +156,7 @@ const Report = () => {
       </header>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8" id="report-content">
         <div className="max-w-6xl mx-auto space-y-8">
           
           {/* Resumo Executivo */}
